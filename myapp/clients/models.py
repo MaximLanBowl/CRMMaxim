@@ -1,3 +1,6 @@
+from django.contrib.auth import get_user_model
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -9,6 +12,8 @@ class Service(models.Model):
 
 class Client(models.Model):
     objects = None
-    username = models.CharField(max_length=50, default='Введите имя')
-    email = models.EmailField(default='Почта')
-    phonenum = models.CharField(max_length=15, default='Номер телефона')
+    username = models.CharField(default=True, null=True)
+    user_id = models.CharField(null=True)
+    email = models.EmailField(default='Почта', unique=True, null=True)
+    status = models.BooleanField(default=True, null=True)
+

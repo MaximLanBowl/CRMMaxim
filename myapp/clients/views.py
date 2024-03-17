@@ -32,7 +32,7 @@ def LoginView(request: HttpRequest) -> HttpResponse:
 
 class ClientsCreateView(CreateView, ModelFormMixin):
     model = Client
-    fields = 'username', 'email', 'phonenum'
+    fields = 'username', 'email'
     template_name = 'leads/leads-create.html'
     permission_required = 'clients.create_user'
     success_url = reverse_lazy("clients:list")
