@@ -10,10 +10,11 @@ class Service(models.Model):
     cost = models.DecimalField(max_digits=10, decimal_places=2)
 
 
+User = get_user_model()
+
+
 class Client(models.Model):
     objects = None
-    username = models.CharField(default=True, null=True)
-    user_id = models.CharField(null=True)
-    email = models.EmailField(default='Почта', unique=True, null=True)
-    status = models.BooleanField(default=True, null=True)
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    email = models.EmailField(default='Почта', unique=True, null=False)
+    status = models.BooleanField(default=True, null=False)

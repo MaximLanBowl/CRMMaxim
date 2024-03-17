@@ -30,12 +30,23 @@ def LoginView(request: HttpRequest) -> HttpResponse:
         return render(request, 'registration/login.html', {"error": 'Invalid login'})
 
 
-class ClientsCreateView(CreateView, ModelFormMixin):
-    model = Client
-    fields = 'username', 'email'
+class ClientsCreateView(CreateView):
+    form_class = ClientsForm
     template_name = 'leads/leads-create.html'
-    permission_required = 'clients.create_user'
     success_url = reverse_lazy("clients:list")
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        Client.objects.create(user=self.object)
+        username = form.cleaned_data.get("username")
+        password = form.cleaned_data.get("password1")
+        user = authenticate(
+            self.request,
+            username=username,
+            password=password,
+        )
+        login(request=self.request, user=user)
+        return response
 
 
 class ClientsListView(ListView):
