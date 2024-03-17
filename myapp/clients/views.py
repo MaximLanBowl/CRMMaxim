@@ -1,12 +1,13 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
-from django.views.generic.edit import ModelFormMixin
+from django.views.generic.edit import ModelFormMixin, UpdateView, DeleteView
 
-from .forms import ServiceForm
+from .forms import ServiceForm, ClientsForm
 from .models import Client
 
 
@@ -31,17 +32,22 @@ def LoginView(request: HttpRequest) -> HttpResponse:
 
 class ClientsCreateView(CreateView, ModelFormMixin):
     model = Client
-    fields = '__all__'
+    fields = 'username', 'email', 'phonenum'
     template_name = 'leads/leads-create.html'
     permission_required = 'clients.create_user'
     success_url = reverse_lazy("clients:list")
 
 
-    def test_func(self):
-        return self.request.user.is_superuser
-
-
 class ClientsListView(ListView):
-    model = Client
+    model = User
     template_name = 'leads/leads-list.html'
-    form_class = ServiceForm
+    form_class = ClientsForm
+
+
+class ClientsEditView(UpdateView):
+    model = Client
+    template_name = 'leads/leads-edit.html'
+
+
+class ClientsDeleteView(DeleteView):
+    model = Client

@@ -9,6 +9,6 @@ class Service(models.Model):
 
 class Client(models.Model):
     objects = None
-    name = models.CharField(max_length=50, default=True)
-    email = models.EmailField()
-    phone = models.CharField(max_length=15, default=True)
+    username = models.CharField(max_length=50, default='Введите имя')
+    email = models.EmailField(default='Почта')
+    phonenum = models.CharField(max_length=15, default='Номер телефона')
