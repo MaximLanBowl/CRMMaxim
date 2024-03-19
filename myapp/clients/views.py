@@ -31,7 +31,9 @@ def LoginView(request: HttpRequest) -> HttpResponse:
 
 
 class ClientsCreateView(CreateView):
+    model = User
     form_class = ClientsForm
+    permission_required = 'clients.change_user'
     template_name = 'leads/leads-create.html'
     success_url = reverse_lazy("clients:list")
 
@@ -39,7 +41,7 @@ class ClientsCreateView(CreateView):
         response = super().form_valid(form)
         Client.objects.create(user=self.object)
         username = form.cleaned_data.get("username")
-        password = form.cleaned_data.get("password1")
+        password = form.cleaned_data.get("password")
         user = authenticate(
             self.request,
             username=username,
@@ -50,7 +52,7 @@ class ClientsCreateView(CreateView):
 
 
 class ClientsListView(ListView):
-    model = User
+    model = Client
     template_name = 'leads/leads-list.html'
     form_class = ClientsForm
 
@@ -62,3 +64,4 @@ class ClientsEditView(UpdateView):
 
 class ClientsDeleteView(DeleteView):
     model = Client
+    template_name = 'leads/leads-delete.html'
